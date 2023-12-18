@@ -1,7 +1,7 @@
 ********************************************************************************
 Version 4.01 running on MacOS
 - Snake : The dumb stuff
-- fathertedcrilly : the tricky stuff
+- fathertedcrilly : The tricky stuff
 ********************************************************************************
                                     uBeeDisk 4.00
 
