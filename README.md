@@ -3,7 +3,7 @@ Version 4.01 running on MacOS
 Snake : The dumb stuff
 fatheredcrilly : the tricky stuff
 ********************************************************************************
-                                    uBeeDisk
+                                    uBeeDisk 4.00
 
          A tool for converting disks/images from one to another with
        optional auto detection options for Microbee, DOS, Applix disks.
@@ -1804,7 +1804,7 @@ Emulators
 Emulators may also be able to access files on disk images but please read the
 IMPORTANT note above first.
 
-Projects by this author
+Projects by this ubee
 =======================
 
 uBee512
@@ -1817,7 +1817,7 @@ uBeeDisk
 A tool for converting disks/images from one to another with
 auto detection options for Microbee disks.
 
-http://www.microbee-mspp.org.au/repository
+https://discord.gg/RRbfkT3duy
 
 z80em86
 -------
@@ -1838,3 +1838,13 @@ For bug reports please provide the following information:
    the actual Linux distribution used and version.
 3) Command line start up options used (cut and paste if possible)
 4) Description of the problem.
+
+# Build for Windows #
+C: make
+
+# Build for macOS #
+% brew install libb2
+% make
+
+# Build for Linux #
+$ make
