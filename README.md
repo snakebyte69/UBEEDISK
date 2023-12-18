@@ -1,4 +1,8 @@
 ********************************************************************************
+Version 4.01 running on MacOS
+Snake : The dumb stuff
+fatheredcrilly : the tricky stuff
+********************************************************************************
                                     uBeeDisk
 
          A tool for converting disks/images from one to another with
@@ -1806,8 +1810,7 @@ Projects by this author
 uBee512
 -------
 An emulator for the Microbee Z80 ROM, FDD and HDD based models.
-
-http://www.microbee-mspp.org.au/repository
+https://discord.gg/SYzQG2XnAz
 
 uBeeDisk
 --------
@@ -1826,7 +1829,7 @@ http://www.gaby.de/z80/z80emu.htm
 Contact
 =======
 If you have any new feature suggestions, bug reports, etc. then please post
-in the appropriate forum topic at http://www.microbee-mspp.org.au/forum
+in Discord at https://discord.gg/RRbfkT3duy
 
 For bug reports please provide the following information:
 1) Version number of the uBeeDisk program.
