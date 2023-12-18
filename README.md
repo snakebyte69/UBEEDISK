@@ -1840,11 +1840,11 @@ For bug reports please provide the following information:
 4) Description of the problem.
 
 # Build for Windows #
-C: make
+- C: make
 
 # Build for macOS #
-% brew install libb2
-% make
+- % brew install libb2
+- % make
 
 # Build for Linux #
-$ make
+- $ make
