@@ -1,0 +1,29 @@
+#===============================================================================
+#!/bin/bash
+#
+# ub-ds82-raw2dsk - Converts a Microbee DS82 raw file to a CPC-EMU DSK file.
+# SJK 2010/02/26.
+#
+# Usage: ub-ds82-raw2dsk input_file output_file
+#
+# Note: options are used here that will overide the format type given in any
+# file extensions!  Prompting for a disk description and the creation of an
+# INFO and ERR files are disabled. The verbose level is set to 0 to disable
+# normal reporting.
+#===============================================================================
+
+if [ "$1" = "" ] || [ "$2" = "" ]; then
+   name=$(basename $0)
+   echo "$name - Converts a Microbee DS82 raw file to a CPC-EMU DSK file."
+   echo "Usage: $name input_file output_file"
+   exit 1
+fi
+
+ubeedisk \
+--info=off \
+--verbose=0 \
+--format=ds82 \
+--itype=raw \
+--if=$1 \
+--otype=dsk \
+--of=$2

@@ -1,0 +1,26 @@
+#!/bin/bash
+#===============================================================================
+# ub-make-ds40-dsk - Creates a formatted Microbee DS40 CPC-EMU DSK file.
+# SJK 2010/02/26.
+#
+# Usage: ub-make-ds40-dsk filename
+#
+# Note: options are used here that will overide the format type given in any
+# file extensions!  The verbose level is set to 0 to disable normal
+# reporting.  No format confirmation prompting!
+#===============================================================================
+
+if [ "$1" = "" ] || [ "$2" != "" ]; then
+   name=$(basename $0)
+   echo "$name - Creates a formatted Microbee DS40 CPC-EMU DSK file."
+   echo "Usage: $name filename"
+   exit 1
+fi
+
+ubeedisk \
+--disk=format \
+--force \
+--verbose=0 \
+--format=ds40 \
+--otype=dsk \
+--of=$1

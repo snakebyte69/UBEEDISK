@@ -1,0 +1,163 @@
+uBeeDisk Software distributions
+===============================
+The latest source and binary distributions are available from:
+
+http://www.microbee-mspp.org.au/public_repository
+
+The "n.n.n" is the version number:
+
+ubeedisk-n.n.n.tar.gz       : Source files
+ubeedisk-n.n.n-win32.exe    : Binary installer for Windows
+ubeedisk-n.n.n-win32.zip    : Binary in ZIP format for Windows
+ubeedisk_n.n.n_i386.deb     : Binary package for Ubuntu (Debian)
+ubeedisk-n.n.n-2.i386.rpm   : Binary package for RPM based distributions
+ubeedisk-n.n.n.tgz          : Binary package for Slackware
+ubeedisk-n.n.n-portable.zip : Binary package combining Windows and Unix
+
+Installation
+============
+For Windows systems the binary installer EXE, binary ZIP, or the Portable  
+binary ZIP distribution may be used.  The later is a combination of Windows
+and Unix binaries.
+
+All binaries have LibDsk, zlib and bz2lib statically linked in.  Linux
+binaries have other dependencies that must also be met.
+
+On Windows, ubeedisk may be installed to any location you want including a
+USB drive, if installing to a systems area then you may need to have
+administration rights to install and run the program.
+
+EXE file
+--------
+1. Run the installer and follow the directions.
+2. To access floppy drives on Windows 2000 and above requires a special
+   floppy driver to be installed. This is available from here:
+   http://simonowen.com/fdrawcmd/
+3. Follow the install instructions under 'ALL SYSTEMS'.
+
+WIN32 ZIP file
+--------------
+1. If you plan on installing over an existing installation then save the
+   current ubeedisk.ini file if this has been customised.
+2. Unzip the Windows ubeedisk-n.n.n-win32.zip binary distribution to a
+   location you wish to use.  If you have a previous installation then you
+   can just unzip over the top of the other.
+3. To access floppy drives on Windows 2000 and above requires a special
+   floppy driver to be installed. This is available from here:
+   http://simonowen.com/fdrawcmd/
+4. Follow the install instructions under 'ALL SYSTEMS'.
+
+UBUNTU DEB (DEBIAN)
+-------------------
+1. Use a package installer of your choice. To use the dpkg installer from a
+   command line:
+   $sudo dpkg -i ubeedisk_n.n.n_i386.deb
+   or from the desktop double click on the deb file from 'File browser'
+2. Follow the configuration instructions under 'UNICES FLOPPY CONFIGURATION'.
+3. Follow the install instructions under 'ALL SYSTEMS'.
+
+RPM (general)
+-------------
+The RPM package should install on most RPM based Linux distributions. 
+
+1. First you may like to do a test install as root, this won't actually
+   install any files but may show any potential problems before installing:
+   # rpm -i --test ubeedisk-n.n.n-2.i386.rpm
+   To do the real install as root:
+   # rpm -i ubeedisk-n.n.n-2.i386.rpm
+2. Follow the configuration instructions under 'UNICES FLOPPY CONFIGURATION'.
+3. Follow the install instructions under 'ALL SYSTEMS'.
+
+TGZ (Slackware)
+---------------
+Binary tar compressed package intended for Slackware or any Linux x86
+installation, this contains the installed directory tree (./usr/...) and
+files.
+
+1. Install the package as root:
+   #/sbin/installpkg ubeedisk-n.n.n.tgz
+2. Follow the configuration instructions under 'UNICES FLOPPY CONFIGURATION'.
+3. Follow the install instructions under 'ALL SYSTEMS'.
+
+PORTABLE ZIP (Windows/Unix binary(s))
+-------------------------------------
+Binary package intended for portable R/W media installations (i.e. USB flash
+drives). Start-up scripts provided allows running Windows or Unix versions of
+uBeeDisk from the same drive without the need to install under the host
+system.  The Unix build of uBeeDisk may also be run from some 'Live CDs'.
+
+1. Unzip the ubeedisk-n.n.n-portable.zip binary distribution to a location
+   you wish to use.  If you have a previous installation then you can just
+   unzip over the top of the other.
+2. As a user under Windows or Unix and under a command line change directory
+   to the installed location.
+3. To access floppy drives on Windows 2000 and above requires a special
+   floppy driver to be installed. This is available from here:
+   http://simonowen.com/fdrawcmd/
+4. Follow the configuration instructions under 'UNICES FLOPPY CONFIGURATION'.
+5. Follow the install instructions under 'ALL SYSTEMS'.
+
+UNICES FLOPPY CONFIGURATION
+---------------------------
+On Unix systems you must have R/W access rights to the floppy disks, this
+may just work out of the box or you will need to make some changes.  How
+this is done can vary, just changing R/W access bits may not work on systems
+that use 'udev', typically floppy devices /dev/fdx belong to the floppy
+group.  As 'root' you can add your user name (or knoppix, etc.) to the
+floppy group found in /etc/group with an editor:
+
+floppy:x:25:knoppix
+
+Just add your user name to the end of the line and don't change the number
+as it will probably be different.  After you have saved the file you must
+log out then log in again for the changes to take affect.
+
+ALL SYSTEMS
+-----------
+If a 'ubeedisk.ini' file is required it should be placed into the 'ubeedisk'
+directory on Windows and portable installs.  On Unices (non-portable) the
+file should be placed into a '.ubeedisk' directory in the user's home
+account.
+
+The 'ubeedisk.ini.sample' supplied in the distribution's 'config' directory
+can be copied across as 'ubeedisk.ini' and changed as required.
+
+SOURCE BUILD/INSTALL
+--------------------
+You will need to have a GCC build environment set up for the native build
+and if you want to cross compile you will also need mingw.
+
+Untar the source distribution into a normal user work area logged in as
+a standard user.
+
+LibDsk
+------
+LibDsk is a dependency and must be built in as a dynamic or static library.
+This distribution includes a patch for libdsk which is highly recommended.
+
+This patch greatly improves the 'remote' type serial speed (including USB
+serial).  Patches and how to apply notes are located in
+'ubee512-n.n.n/patches/libdsk-1.2.1x-ubee.patch.zip'
+
+uBeeDisk
+--------
+$ tar -xzf ubeedisk-n.n.n.tar.gz    (n.n.n is the version number)
+$ cd ubeedisk-n.n.n/src
+
+$ make
+
+If you want to cross compile the windows version:
+$ make ming32
+
+Install the files
+-----------------
+As root:
+# make install
+
+or if you use sudo (ubuntu) you could use:
+$ sudo make install
+
+Un-install the files
+--------------------
+As root:
+# make uninstall

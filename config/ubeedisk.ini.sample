@@ -1,0 +1,737 @@
+#===============================================================================
+#                           uBeeDisk sample INI file
+#
+#                         Copyright (C) 2008-2017 uBee
+#===============================================================================
+#
+# This file should be renamed to 'ubeedisk.ini' OR certain parts of it
+# copied into an existing 'ubeedisk.ini' file that the user may require. 
+# The contents of this file may change between releases and is often used to
+# test new disk formats before being added internally.  It is up to the user
+# to decide whether to overwrite their customised 'ubeedisk.ini' file.
+#
+# Most of the format macros that have built-in support have been replaced by
+# a --format=target.  The same macro names have been kept for consistency. 
+# Any overrides can still be made after the --format=target option.
+#
+# Selecting another configuration file is possible by using the --config
+# option as the first option on the command line, or disable the use of the
+# default configuration file by specifying '--config=none'.
+#
+# Comments lines are preceded by '#' or ';' and must be the first non-space
+# character on the line. Blank lines are ignored.
+#
+# Definition entries
+# ------------------
+# A definition name must be surrounded with square bracket characters '['
+# and ']'. All lines below this are part of the definition until a new
+# definition name or the end of file is reached.  A maximum of 5000
+# definitions are allowed.
+#
+# A definition's contents can NOT reference any other definitions.  The
+# command line options may include any number of references to definitions
+# contained in the file and may be mixed with options.
+#
+# Values contained in the [global-start] and [global-end] sections are
+# always referenced but their use is optional.  It is not the intention that
+# these be called directly by the user.  The [global-start] section is
+# applied before any command line options or customised sections are
+# processed.  The [global_end] section allows options to override what
+# resulted from a command line or a customised section.  i.e. the --model
+# option sets default values and the [global-end] section can globally
+# override the settings if this is required on a global basis.
+#
+# Names used for a definition entry must be unique.  If any command line
+# option parameters that contains a space before it matches the definition
+# name then it will be treated as file definition instead.
+#
+# Specifying options
+# ------------------
+# Options may be divided up and placed onto new lines to make for easier
+# reading.
+#
+# Quoting parameters
+# ------------------
+# Double quotes '"' may be used around an entry causing it to be treated as
+# one option/parameter.
+#
+# Path slashes
+# ------------
+# Either '/' or '\' characters in file paths may be used for portability.
+# The program will figure out which ones to use.
+#
+# GAP values
+# ----------
+# The GAP4 value (from v4.0.0) is dynamically calculated for each formatted
+# track to be written unless disabled with a --gapset=g4:n value.  If 'n' is
+# 0-0x3ffd then that value is used for GAP4, if 'n' = 0x3ffe then a static
+# LibDsk geometry 'dg_fmtgap' value is used or (--fmtgap may override) for
+# GAP4.  If 'n' = 0x3fff then the value is calculated (default).
+#
+# Other GAP values for GAPS 1,2 and 3 and SYNC 1,2 and 3 may also be set
+# using the --gapset option (See README) but these will only work for floppy
+# devices that has support for it. (i.e. Floppyio).
+#
+# The LibDsk floppy driver is only able to set the GAP4 values (dg_fmtgap)
+# and the other --gapset values will be ignored and have no affect.
+#
+# --skew and --skew-ofs
+# ---------------------
+# The --skew and --skew-ofs options are NOT the skewing as often used by a
+# operating system on a disk.  It's a skew value that allows sufficient time
+# for ubeedisk to read and write sectors when working with tracks. 
+# Generally every 2nd sector is skipped for best overall performance when
+# using the PC floppy driver.
+#
+# --pskew, --pskew0 and --pskew1
+# ------------------------------
+# These are Physical sector skewing options (from v4.0.0) and are only used
+# for disk write operations where formatting is also used.  Normally when a
+# track is formatted the physical skewing is 1,2,3,etc. for most disks. 
+# With these options the sectors can be skewed on the disk.  Some disk
+# formats used this form of skewing instead of using logical skewing tables. 
+# If recreating a disk to be used by the native hardware/system then the
+# physical skewing needs to match otherwise accessing the disks may be very
+# slow or even have issues with time-outs.
+#
+# The --pskew option sets the same skewing values for both sides of the
+# media.  The --pskew0 and --pskew1 options may be used if each side of the
+# media uses different skewing values.
+#
+# Default option settings
+# -----------------------
+# The following options are assumed and will be set internally. There is no
+# need to specify these unless the value required is different to that
+# shown.  See "ubeedisk --help" output for information on each option.
+#
+# The --sidedness option no longer does anything so can be ignored as
+# ubeedisk uses physical and not logical values.
+#
+# A "--format=name" may be used to set all the geometry values to a certain
+# built-in format then further single geometry options as required.
+#
+# Control settings
+# ----------------
+# --autorate=on
+# --buffering=normal
+# --skew=2
+# --skew-ofs=1
+#
+# Geometry settings (Default)
+# ---------------------------
+# --cylinders=80
+# --heads=2
+# --sidedness=alt
+# --secbase=1
+# --secsize=512
+# --datarate=sd
+# --rwgap=0
+# --fmtgap=0
+# --fm=0
+# --nomulti=1
+# --noskip=1
+# --side1as0=0
+# --secbase2c=-1
+# --secbase2s=1
+#
+# Environment variables and conditionals
+# --------------------------------------
+# The "--if" conditionals and variable support requires ubeedisk-4.0.0 or
+# later.  If using an earlier version of ubeedisk it is recommended to
+# upgrade to the latest version or use --config=none on the ubeedisk command
+# line as the first option.
+#
+# Environment variables may be specified in any of the parameters to any
+# options. The method used is portable between systems.  To reference an
+# application or system environment variable enclose the name with '@'
+# characters. i.e: @ENVVAR@
+#
+# To set uBeeDisk environment variables using options:
+# --if-system=win
+#    --varset="UBEE_SERIAL=com3"
+# --if-end
+# --if-system=linux
+#    --varset="UBEE_SERIAL=/dev/ttyACM0"
+# --if-end
+#
+# The above method has the advantage that the required system dependent
+# variables can all be contained in the one configuration file.
+#
+# Setting an environment variable is dependent on the host shell, here are
+# the most common shells and methods used:
+#
+# Windows:
+# set ENVVAR=value
+#
+# bash, sh:
+# export ENVVAR=value
+#
+# csh, tsh:
+# setenv ENVVAR value
+#
+# Usage examples
+# --------------
+# Format a floppy disk in drive A: to Microbee DS40 format
+# >ubeedisk fmt-a-ds40
+#
+# Scan the first 10 cylinders of a disk in A:
+# >ubeedisk scan-a-10
+#===============================================================================
+
+#===============================================================================
+# Place your global start preferences in this section.
+#
+# The "--if" conditionals and variable support requires ubeedisk-4.0.0 or
+# later.  If using an earlier version of ubeedisk it is recommended to
+# upgrade to the latest version or use --config=none on the ubeedisk command
+# line as the first option.
+#
+# Do NOT change the entry name, the program will look for 'global-start'
+# automatically on start-up.
+#===============================================================================
+[global-start]
+# set the version of this config file (avoids warning message)
+--confv=4.0.0
+
+# set some built in system dependent variables for Windows
+--if-system=win
+   --varset="UBEE_FDRV=ntwdm"
+   --varset="UBEE_FD350=a:"
+   --varset="UBEE_FD525=b:"
+   --varset="UBEE_FD0=a:"
+   --varset="UBEE_FD1=b:"
+   --varset="UBEE_FD2=c:"
+   --varset="UBEE_FD3=d:"
+   --varset="UBEE_FIO1=COM3:"
+--if-end
+
+# set some built in system dependent variables for Unix systems
+--if-system=unix
+   --varset="UBEE_FDRV=floppy"
+   --varset="UBEE_FD350=/dev/fd0"
+   --varset="UBEE_FD525=/dev/fd1"
+   --varset="UBEE_FD0=/dev/fd0"
+   --varset="UBEE_FD1=/dev/fd1"
+   --varset="UBEE_FD2=/dev/fd2"
+   --varset="UBEE_FD3=/dev/fd3"
+   --if-system=linux
+      --varset="UBEE_FIO1=/dev/ttyACM0"
+   --if-end
+   --if-system=freebsd
+      --varset="UBEE_FIO1=/dev/cuaa0"
+   --if-end
+--if-end
+
+# If you want your signature appearing in the 'info' file then uncomment this
+;--signature="your signature here"
+
+# To handle disk errors automatically uncomment this
+;--unattended=on
+
+# To write a message to the console uncomment this
+;--echo="This is uBeeDisk-@UBEE_VERSION@"
+
+# To disable GAP4 auto calculations for devices that support it uncomment
+# this or give it an actual GAP value
+;--gapset=g4:0
+
+# Or use this to use the dg_fmtgap value from the LibDsk geometry
+;--gapset=g4:0xeffe
+
+#===============================================================================
+# Place your global end preferences in this section.
+#
+# Do NOT change the entry name, the program will look for 'global-end'
+# automatically at the end of all other options.
+#===============================================================================
+[global-end]
+
+#===============================================================================
+# Some useful entries when using this script.
+#
+# --lcons=5 determines where the --lcon and --lconw options start to list
+# entries. Without this the stating point is 1.  This is used to skip
+# displaying entries designed for script administration.
+#===============================================================================
+[list]
+--lcons=5
+--lconw
+
+[listall]
+--lconw
+
+#===============================================================================
+# Detect Microbee 3.5" or 5.25" formats
+#===============================================================================
+[mbee]
+--detect=mbee
+
+[mbee3]
+--detect=mbee3
+
+[mbee5]
+--detect=mbee5
+
+#===============================================================================
+# Various short macros
+#===============================================================================
+[clean]
+--disk=clean
+
+[copy]
+--disk=copy
+
+[format]
+--disk=format
+
+[info]
+--disk=info
+
+[scan]
+--disk=scan
+
+[speed]
+--disk=speed
+
+[ss80]
+--format=ss80
+
+[ds80]
+--format=ds80
+
+[ds84]
+--format=ds84
+
+[ds40]
+--format=ds40
+
+#===============================================================================
+# Macros for a Floppyio device or FDS.COM run on a Microbee.
+#
+# The baud rate makes no difference when used with a Floppyio USB interface
+# as it always transfers data at maximum speed.  FDS uses traditional serial
+# port so the setting must match the speed FDS is set to.
+#
+# The 'fioOD' format is:
+# 'O' is either a Read (r) or write (w) operation.
+# 'D' is the drive letter.
+#
+# The macros used here for the serial port uses a ubeedisk variable name of
+# @UBEE_FIO1@ which is automatically set with a serial port according to the
+# operating system in use but the port must be defined above under the
+# [global start] section as needed.
+#===============================================================================
+[fiora]
+--itype=remote --if=serial:@UBEE_FIO1@,19200-crtscts,a:
+
+[fiorb]
+--itype=remote --if=serial:@UBEE_FIO1@,19200-crtscts,b:
+
+[fiorc]
+--itype=remote --if=serial:@UBEE_FIO1@,19200-crtscts,c:
+
+[fiord]
+--itype=remote --if=serial:@UBEE_FIO1@,19200-crtscts,d:
+
+[fiowa]
+--otype=remote --of=serial:@UBEE_FIO1@,19200-crtscts,a:
+
+[fiowb]
+--otype=remote --of=serial:@UBEE_FIO1@,19200-crtscts,b:
+
+[fiowc]
+--otype=remote --of=serial:@UBEE_FIO1@,19200-crtscts,c:
+
+[fiowd]
+--otype=remote --of=serial:@UBEE_FIO1@,19200-crtscts,d:
+
+#===============================================================================
+# Some macros to extract raw system tracks only from a disk image.
+#
+# Usage: st-ds40 --if=name --of=name
+#===============================================================================
+[st-ds40]
+--format=ds40 --otype=raw --start=0 --finish=1 --nofill --entdesc=off --info=off
+
+[st-ss80]
+--format=ss80 --otype=raw --start=0 --finish=1 --nofill --entdesc=off --info=off
+
+[st-ds80]
+--format=ds80 --otype=raw --start=0 --finish=3 --nofill --entdesc=off --info=off
+
+[st-ds82]
+--format=ds82 --otype=raw --start=0 --finish=1 --nofill --entdesc=off --info=off
+
+[st-ds84]
+--format=ds84 --otype=raw --start=0 --finish=1 --nofill --entdesc=off --info=off
+
+[st-ds8b]
+--format=ds8b --otype=raw --start=0 --finish=3 --nofill --entdesc=off --info=off
+
+#===============================================================================
+# Microbee TEAC HDD (10mb) 306 cylinders, 4 heads, 17 sect/track
+#===============================================================================
+[mbee-teac]
+--format=teac
+
+#===============================================================================
+# Microbee Miniscribe HDD (10mb) 612 cylinders, 2 heads, 17 sect/track
+#===============================================================================
+[mbee-mscribe]
+--format=mscribe
+
+#===============================================================================
+# Microbee DS40 disk. 40T DS DD
+#===============================================================================
+[mbee-ds40]
+--format=ds40
+
+#===============================================================================
+# Microbee SS80 disk. 80T SS DD
+#===============================================================================
+[mbee-ss80]
+--format=ss80
+
+#===============================================================================
+# Microbee DS80 disk. 80T DS DD
+#===============================================================================
+[mbee-ds80]
+--format=ds80
+
+#===============================================================================
+# Microbee DS80 special disk variation (non standard). 80T DS DD
+# This is a special disk where only the first cylinder uses sectors 1-10 and
+# sectors 21-30 start on cylinder 1 instead of 2.
+#===============================================================================
+[mbee-ds80sp]
+--format=default
+--description="Microbee DS80SP MACRO"
+--cylinders=80
+--heads=2
+--sectors=10
+--side1as0=1
+--secbase2c=1
+--secbase2s=21
+
+#===============================================================================
+# Microbee DS84 disk. 80T DS DD
+#===============================================================================
+[mbee-ds84]
+--format=ds84
+
+#===============================================================================
+# Microbee DS8B disk. 80T DS DD
+#===============================================================================
+[mbee-ds8b]
+--format=ds8b
+
+#===============================================================================
+# For reading please use the '--detect=dos' options instead which provides
+# automatic detection.
+#
+# Atari 80T SS DD 9 s/t 512 b/s
+#===============================================================================
+[atari-ss80]
+--format=atari-ss80
+
+#===============================================================================
+# For reading please use the '--detect=dos' options instead which provides
+# automatic detection.
+#
+# Atari 80T DS DD 9 s/t 512 b/s
+#===============================================================================
+[atari-ds80]
+--format=atari-ds80
+
+#===============================================================================
+# Tandy Color 40T disk. 40T DS DD 18 s/t 256 b/t
+#===============================================================================
+[tandyc40]
+--format=default
+--description="Tandy Color 40T DS DD 18 s/t 256 b/t MACRO"
+--cylinders=40
+--heads=2
+--sectors=18
+--secsize=256
+
+#===============================================================================
+# Tandy Color 3.5" disk. 80T DS DD 18 s/t 256 b/t
+#===============================================================================
+[tandyc80]
+--format=default
+--description="Tandy Color 3.5in 80T DS DD 18 s/t 256 b/t MACRO"
+--cylinders=80
+--heads=2
+--sectors=18
+--secsize=256
+--skew=1
+--skew-ofs=0
+
+#===============================================================================
+# Applix - detect Applix disk variations.
+#===============================================================================
+[applix]
+--detect=applix
+
+#===============================================================================
+# DOS - All MSDOS, PCDOS, Atari ST, MSX-DOS 2 formats using auto detection.
+# This replaces all other 'msdos' and 'atari' macros for reading purposes.
+#===============================================================================
+[dos]
+--detect=dos
+
+#===============================================================================
+# Atari - forces DOS Atari ST auto detection.
+#===============================================================================
+[atari]
+--detect=atari
+
+#===============================================================================
+# MSX-DOS - forces DOS MSX-DOS auto detection.
+#===============================================================================
+[msx]
+--detect=msx
+
+#===============================================================================
+# MSDOS 160kb 40T SS DD 8 s/t 512 b/s
+#
+# For reading please use the '--detect=dos' options instead which provides
+# automatic detection.
+#===============================================================================
+[msdos-160kb]
+--format=msdos-160kb
+
+#===============================================================================
+# MSDOS 180kb 40T SS DD 9 s/t 512 b/s
+#
+# For reading please use the '--detect=dos' options instead which provides
+# automatic detection.
+#===============================================================================
+[msdos-180kb]
+--format=msdos-180kb
+
+#===============================================================================
+# MSDOS 320kb 40T DS DD 8 s/t 512 b/s
+#
+# For reading please use the '--detect=dos' options instead which provides
+# automatic detection.
+#===============================================================================
+[msdos-320kb]
+--format=msdos-320kb
+
+#===============================================================================
+# MSDOS 360kb 40T DS DD 9 s/t 512 b/s
+#
+# For reading please use the '--detect=dos' options instead which provides
+# automatic detection.
+#===============================================================================
+[msdos-360kb]
+--format=msdos-360kb
+
+#===============================================================================
+# MSDOS 720kb 80T DS DD 9 s/t 512 b/s
+#
+# For reading please use the '--detect=dos' options instead which provides
+# automatic detection.
+#===============================================================================
+[msdos-720kb]
+--format=msdos-720kb
+
+#===============================================================================
+# MSDOS 1.2mb 80T DS HD 15 s/t 512 b/s (datarate set to hd)
+#
+# For reading please use the '--detect=dos' options instead which provides
+# automatic detection.
+#===============================================================================
+[msdos-1200kb]
+--format=msdos-1200kb
+
+#===============================================================================
+# MSDOS 1.44mb 80T DS HD 18 s/t 512 b/s (datarate set to hd)
+#
+# For reading please use the '--detect=dos' options instead which provides
+# automatic detection.
+#===============================================================================
+[msdos-144mb]
+--format=msdos-144mb
+
+#===============================================================================
+# IBM3740 8" 77T SS SD 26 s/t 128 b/s
+#===============================================================================
+[ibm3740]
+--format=ibm3740
+
+#===============================================================================
+# IBM3740 (DS) 8" 77T DS SD 26 s/t 128 b/s
+#===============================================================================
+[ibm3740ds]
+--format=ibm3740ds
+
+#===============================================================================
+# Datamax 8000 IBM3740 8" 77T SS SD 26 s/t 128 b/s
+#===============================================================================
+[datamax8000sd]
+--format=datamax8000sd
+
+#===============================================================================
+# Greybeard's 8" 77T SS SD 9 s/t 512 b/s
+#===============================================================================
+[gbss77]
+--format=gbss77
+
+#===============================================================================
+# North Star Horizon - 5.25". 256 b/s 35T 10 s/t SS SD (89600 bytes) The
+# disk format is North Star DOS format (See North Star documentation)
+#===============================================================================
+[nshs]
+--format=nshs
+
+#===============================================================================
+# Little Big Board (LBB) 5.25" 77T DS HD 17 s/t 512 b/s
+# format data is as for 'form3a.mac' source code
+#===============================================================================
+[lbb_77dshd]
+--format=lbb_77dshd
+
+#===============================================================================
+# Little Big Board (LBB) 5.25" 40T DS DD 9 s/t 512 b/s
+#===============================================================================
+[lbb_40dsdd]
+--format=lbb_40dsdd
+
+#===============================================================================
+# Unknown 40T DS DD 10x512 s/t disk.
+#===============================================================================
+[uds40]
+--format=default
+--description="Unknown 40T DS DD 10x512 s/t MACRO"
+--cylinders=40
+--heads=2
+--sectors=10
+
+#===============================================================================
+# Unknown 80T DS DD 10x512 s/t disk.
+#===============================================================================
+[uds80]
+--format=default
+--description="Unknown 80T DS DD 10x512 s/t MACRO"
+--cylinders=80
+--heads=2
+--sectors=10
+
+#===============================================================================
+# Dual SS files system on a single double sided disk.
+#
+# This should be used on a double sided disk where side 1 (2nd side) has an
+# independent file system.  This should NOT be confused with a 'flipper'
+# disk format that has 2 index holes in the cover.  The disk is normal and
+# used in a double sided drive but the operating system determines what side
+# of the disk to use, i.e.  possibly one side was drive A: and the other
+# drive B:
+#
+# Use a SS disk definition and this macro to pull side 1 off as a side 0
+# disk and to write it out as side 0.
+#
+# i.e: --format=ibm3740 fromside1
+#===============================================================================
+[fromside1]
+--iside=1
+
+#===============================================================================
+# Format some common Microbee disks in PC floppy A: or B:
+#===============================================================================
+[fmt-a-ds40]
+--disk=format --otype=fd --of=@UBEE_FD0@ --format=ds40
+[fmt-b-ds40]
+--disk=format --otype=fd --of=@UBEE_FD1@ --format=ds40
+
+[fmt-a-ss80]
+--disk=format --otype=fd --of=@UBEE_FD0@ --format=ss80
+[fmt-b-ss80]
+--disk=format --otype=fd --of=@UBEE_FD1@ --format=ss80
+
+[fmt-a-ds80]
+--disk=format --otype=fd --of=@UBEE_FD0@ --format=ds80
+[fmt-b-ds80]
+--disk=format --otype=fd --of=@UBEE_FD1@ --format=ds80
+
+[fmt-a-ds82]
+--disk=format --otype=fd --of=@UBEE_FD0@ --format=ds82
+[fmt-b-ds82]
+--disk=format --otype=fd --of=@UBEE_FD1@ --format=ds82
+
+[fmt-a-ds84]
+--disk=format --otype=fd --of=@UBEE_FD0@ --format=ds84
+[fmt-b-ds84]
+--disk=format --otype=fd --of=@UBEE_FD1@ --format=ds84
+
+#===============================================================================
+# Scan the first 10 cylinders of a PC floppy disk in A or B:
+#===============================================================================
+[scan-a-10]
+--disk=scan --finish=9 --if=@UBEE_FD0@
+
+[scan-b-10]
+--disk=scan --finish=9 --if=@UBEE_FD1@
+
+#===============================================================================
+# Scan the first 5 cylinders of a single sided PC floppy disk in A or B:
+#===============================================================================
+[scan-ss-a-5]
+--disk=scan --scanhead=0 --finish=4 --if=@UBEE_FD0@
+
+[scan-ss-b-5]
+--disk=scan --scanhead=0 --finish=4 --if=@UBEE_FD1@
+
+#===============================================================================
+# Scan the first cylinder of a PC floppy disk in A or B:
+#===============================================================================
+[scan-a-1]
+--disk=scan --finish=0 --if=@UBEE_FD0@
+
+[scan-b-1]
+--disk=scan --finish=0 --if=@UBEE_FD1@
+
+#===============================================================================
+# Special format to completely ERASE a xT DS DD disks with 00s for entire
+# tracks using a floppy device that supports it.  Disks will not be able to
+# be read by a normal MFM floppy controller as there will be no index marks,
+# etc.
+#
+# This will only erase tracks and not what is between the tracks.  A 5.25"
+# 40T drive is probably best suited for erasing 5.15" disks that have been
+# used for 80 tracks at any stage.
+#===============================================================================
+[erase-40]
+--format=erase-40
+--erase=0
+--disk=format
+
+[erase-80]
+--format=erase-80
+--erase=0
+--disk=format
+
+#===============================================================================
+# Example macros to demonstrate certain features or for testing are placed here.
+#===============================================================================
+[pskewdemo]
+--echo="This is a demo/test of physical sector skewing"
+--format=default
+--description="Test physical skew values"
+--cylinders=80
+--heads=2
+--sectors=5
+--pskew0=4,2,5,3,1
+--pskew1=1,4,2,5,3
+
+# Experimental 11x512 sector disk (Only for read operations once written)
+# Atari 80T SS DD 11 s/t 512 b/s
+[atari-11s]
+--echo="This is a demo/test of GAP/SYNC modifications"
+--format=default
+--description="Atari 80T SS DD 11x512 s/t (Read Only) MACRO"
+--cylinders=80
+--heads=1
+--sectors=11
+--gapset="g1:10,s1:3, g2:22,s2:12, g3:0,s3:0, g4:1"

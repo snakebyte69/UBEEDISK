@@ -1,0 +1,247 @@
+Microbee Disk Formats
+=====================
+4 February 2010 - uBee
+
+This document describes the physical layout of most of the common disk
+formats used by the Microbee computer.
+
+The Microbee uses a Western Digital WD2793 disk controller on later models
+for formatting and accessing floppy disks.
+
+Low level format
+----------------
+The low level format method employed on disks allows for reading/writing
+sectors on normal PC floppy controllers.
+
+There is a problem with the original formatted disks that causes a problem
+to FDC controllers if not taken into account.  The native format programs
+used the value of 0 on both sides of the disk in the sector headers.  This
+issue is usually the 'show stopper' when trying to access Microbees disks on
+modern hardware.
+
+The WD2793 controller ignored the Side value so was never a problem on the
+Microbee hardware.  The side issue is present on all native DS40 and DS80
+disks. 3rd party formatting tools usually wrote the correct side numbers for
+both sides of the disk.
+
+The side issue must be considered a possibility on ALL Microbee disks.
+
+Sector numbers
+--------------
+Sector numbers are always numbered 1-10 on the reserved (system) tracks and
+this format is also normally used for the data tracks.  The sectors are
+written in sequential order, no skewing is done at the low level.
+
+One of the formats (DS80) differs for the data area where sector numbers
+21-30 are used. The reason for this was likely to have been a protection
+measure to stop SS80 and DS80 disks becoming corrupted if the wrong disk was
+placed into the machine.
+
+To make a disk image from a DS80 disk format requires that the reserved
+track's sectors 1-10 and data sectors 21-30 to be taken into account.
+
+Data skewing
+------------
+Skewing of the data tracks for all disks is used and was normally done by
+the operating system in use.  The typical skewing used is one of the
+following:
+
+SKEW1:  2,  5,  8,  1,  4,  7, 10,  3,  6,  9
+SKEW2: 22, 25, 28, 21, 24, 27, 30, 23, 26, 29
+
+Copy protected formats
+----------------------
+These following formats have been worked out from looking at some sample
+disks, Type 1 is the most common format used.  There are possibly other
+protection formats in use.
+
+Type 1
+------
+A common method employed for some copy protected disks was to use a mixture
+of 512 and 1024 byte sectors.  From all the disks I have seen that use this
+protection method the layout is consistent.
+
+The disks all appear to be single side, double density (MFM) types, and use
+only the first 40 cylinders regardless of being 3.5" or 5.25" media. The
+first 5 cylinders (0 - 4) use 10 x 512 sectors and the remaining 35
+cylinders (5 - 39) use 5 x 1024 sectors.  The track sectors are numbered
+starting from 1.
+
+Type 2
+------
+I have found one disk that uses this method and I'm assuming it's not a bad
+disk as it appears to run correctly.  The disk layout is the same as the
+SS80 format shown below but cylinder #5 has sectors numbered from 0 - 9
+instead of 1 - 10.  Sector #0 can't be read without error, skipping reading
+this sector and writing back sector #0 (with any data) as a good sector
+seems to work fine.
+
+Low level formatting
+====================
+The format shown below is typical for a Microbee 10 s/t double density floppy
+disk (From the FORMAT40.COM Format program).
+
+Microbee disks used Single and Double Density IBM formats.  The information
+presented here is for double density disks and is a variation on the 'IBM
+System 34 Format'.  Refer to a WD279x data sheet.
+
+Refer to a WD279x data sheet.
+
+DATA BITS = RATE / RPS
+
+DATA BITS = number of bits written in one disk revolution (data per track)
+RATE      = data rate bits per second (300,000)
+RPS       = revolutions per second (6)
+
+50,000 = 300,000 / 6
+
+6250 bytes per track (50,000 / 8) is the nominal amount of data per track.
+
+* Typically sector numbers 1-10 are used except for data tracks on DS80
+  disks where the sector are numbered 21-30.  The sectors are written in
+  sequential order.
+
+* Microbee native format programs have SIDE set to 0 when writing side 0 or
+  side 1 of the disk.  3rd party programs may use SIDE=1 for side 1.
+
+* Dreamdisk formats use bit 7 of the SIDE value to indicate if the disk is
+  double sided.  If the bit is set the disk is double sided otherwise single
+  sided.  This appears to be non-standard so may cause problems with floppy
+  controllers.
+
+* The number of GAP bytes depends on the number of sectors on the disk.  If
+  1024 byte sectors are used then the GAP value should be increased between
+  each sector.
+
+TRACK START
+-----------
+QTY (dec) data (hex)
+32        4E (GAP)
+
+SECTOR HEADER
+-------------
+8         0
+3         F5 (writes A1)
+1         FE (IAM)
+1         TRACK
+1         SIDE+1 (see Low level formatting notes)
+1         SECTOR NUMBER
+1         2  (sector length 0=128, 1=256, 2=512, 3=1024)
+1         F7 (writes 2 CRCs)
+22        4E (GAP)
+
+DATA BLOCK
+----------
+12        0
+3         F5
+1         FB (DAM)
+512       E5 (data contents, 512 bytes normally)
+1         F7 (writes 2 CRCs)
+31        4E (GAP)
+
+Repeat for all sectors starting at SECTOR HEADER
+
+END OF TRACK FILLER (ERASES OLD SECTORS/HEADERS)
+------------------------------------------------
+512       4E (GAP, Keep writing until the track is full)
+
+Microbee Disk formats
+=====================
+
+DS40 (SBC)
+----------
+        Size: 5.25"
+    Capacity: 400K
+   Cylinders: 40
+  Sect/track: 10
+   Sect/Size: 512 bytes
+     Density: Double (MFM)
+       Heads: 2
+  Res tracks: 2 (S0 T0 and S1 T0)
+ Res sectors: 1 - 10
+Data sectors: 1 - 10
+   Data skew: SKEW1
+
+SS80 (CIAB)
+-----------
+        Size: 3.5"
+    Capacity: 400K
+   Cylinders: 80
+  Sect/track: 10
+   Sect/Size: 512 bytes
+     Density: Double (MFM)
+       Heads: 1
+  Res tracks: 2 (S0 T0 and S0 T1)
+ Res sectors: 1 - 10
+Data sectors: 1 - 10
+   Data skew: SKEW1
+
+DS80 (Microbee)
+---------------
+        Size: 3.5"
+    Capacity: 800K
+   Cylinders: 80
+  Sect/track: 10
+   Sect/Size: 512 bytes
+     Density: Double (MFM)
+       Heads: 2
+  Res tracks: 4 (S0 T0,T1 and S1 T0,T1)
+ Res sectors:  1 - 10
+Data sectors: 21 - 30
+   Data skew: SKEW2
+
+DS82 (Dreamdisk)
+----------------
+        Size: 3.5"
+    Capacity: 800K
+   Cylinders: 80
+  Sect/track: 10
+   Sect/Size: 512 bytes
+     Density: Double (MFM)
+       Heads: 2
+  Res tracks: 2 (S0 T0 and S1 T0)
+ Res sectors: 1 - 10
+Data sectors: 1 - 10
+   Data skew: SKEW1
+
+DS84 (PJB)
+----------
+        Size: 3.5"
+    Capacity: 800K
+   Cylinders: 80
+  Sect/track: 10
+   Sect/Size: 512 bytes
+     Density: Double (MFM)
+       Heads: 2
+  Res tracks: 2 (S0 T0 and S1 T0)
+ Res sectors: 1 - 10
+Data sectors: 1 - 10
+   Data skew: SKEW1
+
+HS350 (Honeysoft 3.5")
+----------------------
+        Size: 3.5"
+    Capacity: 200K or 400K (most are 200K)
+   Cylinders: 40 (or 80 if 400K)
+  Sect/track: 10 x 512 (1st 5 tracks) and 5 x 1024 (remainder)
+   Sect/Size: 512 and 1024 bytes
+     Density: Double (MFM)
+       Heads: 1
+  Res tracks: 5
+ Res sectors: 1 - 10
+Data sectors: 1 - 5
+   Data skew: ?
+
+HS525 (Honeysoft 5.25")
+-----------------------
+        Size: 5.25"
+    Capacity: 200K
+   Cylinders: 40
+  Sect/track: 10 x 512 (1st 5 tracks) and 5 x 1024 (remainder)
+   Sect/Size: 512 and 1024 bytes
+     Density: Double (MFM)
+       Heads: 1
+  Res tracks: 5
+ Res sectors: 1 - 10
+Data sectors: 1 - 5
+   Data skew: ?

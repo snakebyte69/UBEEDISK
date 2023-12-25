@@ -1,0 +1,499 @@
+4 February 2017 - uBee
+----------------------
+uBeeDisk v4.0.0
+
+New for this release:
+* Added --pskew, --pskew0 and --pskew1 physical skewing options.
+* Added --cacher and --cachew options to enable disable read/write caching
+  if the device supports it.
+* Added --gapset option.  This allows just about any custom floppy disk
+  format to be created on devices that support it.
+* Added --erase option to completely erase tracks with a set value for
+  devices that may support it.
+* Added special low level 'erase-40' and 'erase-80' internal formats for
+  track eraser for devices that are able to support it.
+* Added a 'dos' detection module.  By using --detect=dos it allows disk
+  imaging of virtually any IBM DOS, Atari ST, MSX-DOS disk or any other
+  disks that use the same disk structure automatic.
+* Added a built in Little Big Board (lbb_77dshd) format with GAP values.
+* Added a 'dos', 'atari', 'msx', 'applix' macros to 'ubeedisk.ini.sample'. 
+  The existing 'msdos*' and 'atari*' macros should be considered obsolete
+  for reading purposes.  'dos' will try to detect 'atari' and 'msx' but can
+  be forced by using the macro names.
+* Added separate --datarateip and --datarateop input/output options.
+* Added separate --fmip and --fmop input/output options.
+* Added separate --autorateip and --autorateop input/output options.
+* Added a --confv option for use in ubeedisk.ini file to set script version.
+* Added Warning messages if the config file can't be found or if the config
+  file is an old version.
+* Added a ATTR_CACHER_OFF and ATTR_CACHEW_OFF attribute option that may be
+  used by an internal format definition to disable read/write caching in
+  devices that supports it.  May be overriden using the --cacher=on or
+  --cachew=on options.
+* Added two low level ERASE macros to 'ubeedisk.ini.sample'. These being
+  'erase-40' and 'erase-80' which make use of the new --erase option.
+* Added output file name substitution characters. See README for the full
+  details. These are very useful when using the new DOS module.
+* Added conditional options support mainly intended for scripting usage. 
+  These are used to set system variables for various systems so that
+  'ubeedisk.ini.sample' can now handle different script settings
+  automatically.
+* Added built-in and environment variable support mainly intended for
+  scripting usage.
+* Added various short simple macros 'scan', 'copy', 'format', etc to
+  'ubeedisk.ini.sample' instead of having to type in --disk=job.
+
+Changes:
+* Changes to format modules that required physical skewing on disk is now
+  implemented differently.
+* All jobs now return an error status that may be used in scripts.
+* A major overhaul concerning data rates and MFM/FM recording modes for
+  input and output so that input and output can use different data rates and
+  recording modes.
+* Able to exit when prompted for a disk description by entering an '*' on a
+  line by itself.
+* Removed the --buffering mode option. Use --cacher and --cachew instead.
+* Changes to the information in the 'info' file output.
+* Major changes/additions to 'ubeedisk.ini.sample' to detect operating
+  system and set variables for PC floppy drives and remote serial use.
+* Some formats defined in 'ubeedisk.ini.sample' now set the internal format.
+
+Fixed:
+* LibDsk build for Linux was using wrong build prefix so was being built
+  against an older LibDsk build.  Should now be LibDsk-1.4.2
+* Set internal formats 'skew_val' and  'skew_ofs' where -1 was being used to
+  the actual values wanted.  This means the values will not use the default
+  values any longer.  The default values are 2 and 1 so was not an issue but
+  not as originally intended.
+* Changed datarate scan order in disk_scan() and disk_speed() as a 360Kb
+  disk in 1.2Mb drive may return the incorrect value if scanned as SD first.
+* Some minor fixes, removal of obsolete code and code tidying.
+
+16 November 2016 - uBee
+-----------------------
+uBeeDisk v3.1.0
+
+New for this release:
+* Compiled up against the LibDsk-1.4.2 library which now provides IMD and
+  TRS-80 'JV3'image support along with other changes since 1.3.5.  See the
+  LibDsk ChangeLog.
+* LibDsk DSK and RAW drivers do not support the --iside and --oside options
+  and may only work for floppy access?  Provide a work around if setting
+  --iside or --oside and not supported by the driver.
+* Added --nofill option to skip 0xe5 fill after the 'finish' point.
+* Added auto input/output type setting for '.imd' images.
+* Added a hint to one of the fdc_gap_calc() error messages.
+* Added Knight 'k80sssd128' format (5.25" SS SD 80T 80x18x128 b/s).
+* Added Knight 'k80dsdd512' format (5.25" DS DD 80T 80x10x512 b/s).
+* Updated --help option for the above changes.
+* Added Little Big Board (lbb_77dshd) macro to ubeedisk.ini.sample.
+* Added Datamax 8000 (datamax8000sd) macro to ubeedisk.ini.sample.
+* Added a 'ibm3740ds' macro to ubeedisk.ini.sample.
+* Added a special 'ds80sp' DS80 disk format variation to ubeedisk.ini.sample.
+* Added 'st-dsxx', etc. macros to ubeedisk.ini.sample.  These may be used
+  for extracting system tracks to a raw file.
+
+Fixed:
+* Fixed the 'knight80' entry to use a head offset value of 128.
+* Fixed Makefile 'r' permissions for Unices installs.
+* Fixed density description for IBM3740 format in ubeedisk.ini.sample.
+
+28 February 2015 - uBee
+-----------------------
+uBeeDisk v3.0.0
+
+New for this release:
+* Added dynamic GAP calculations which will be used by PC floppy output and
+  disk images that support storing the value, static values may still
+  be defined and will be used instead except for Floppyio units.
+* Replaced specific disk format handling code with xdg.*_cb() call-back
+  functions which are defined in the disk support modules if needed.
+* Added checking when opening input/output for formats that use a variable
+  track size that the disk type specified is suitable.
+* Added better error reporting to the disk write section to report the first
+  10 write errors and removed the verbose level controlled error reporting
+  associated with it.
+* Added --sfmode option to allow --start and --finish to refer to cylinders
+  or logical tracks, default mode is cylinders as before but logical tracks
+  mode provides finer control.
+* Added new 'info' file entries for the input/output drive types used.
+* Added --sideoffs option for control over sector side information.
+* Added --fdwa1, --fdwa2 and --fdwa options to provide control over the
+  floppy work-around code.
+* Added 'serial:' remote file detection to auto set the type to remote.
+* Added --it and --ot options as non ambiguous option names for --itype and
+  --otype as these had been in common use and could have become broken if
+  other --it* or --ot* options were ever added.
+* Added --ifile and --ofile to be consistent with type options names.
+* Added Super-80 's80cpm1' CP/M 80T format disks.
+* Added Amust Compak DS DD 80T 1x16x256, 79x5x1024 b/s 5.25" disks.
+* Added Excalibur4 DS DD 80T 80x5x1024 b/s 5.25" disks.
+* Added Dreamdisk 'dds40' and 'dds80' formats using new side offset support.
+* Added 'ds40s' and 'ss40s' 40x18x128 b/s 5.25" SD formats.
+* Added some general purpose built in formats (see --lformat).
+* Compiled up against the LibDsk-1.3.5 library which now provides write
+  support for CopyQM disk images along with many other changes since 1.2.1
+  released in 2008-01-23. See the LibDsk ChangeLog.
+* Added Raspberry Pi 'deb', 'rpm' and 'tgz' binary distribution builds.
+
+Changes:
+* Changes to remove the auto 'mbee' detection setting, the user must now
+  specify it on the command line if detection is required.
+* Changes to disk scan process for faster scanning on each track.
+* Suppressed repetitive disk format selection information.
+* Replaced the GNU MD5 code with later version and changes as required.
+* Changes to source code now makes adding new modules easier.
+* The --flags option has been deprecated.
+* Changes to --lformat to double the width of the left column output.
+* Changes to make --ltype option provide better information.
+* Removed external Gamma, Applix, 60, 3030, ds40u and ds80u formats from
+  'ubeedisk.ini.sample' as these formats are now built-in.
+
+Fixed:
+* Fixed a bug introduced in v2.2.0 where copying RAW to DSK (and possibly
+  other input types) failed to write on Head 1 of the disk for formats that
+  use side 0 on both sides of the disk.
+* Fixed segmentation error when a disk error is being logged and the batch
+  mode (--count option) was also in affect.
+* Fixed track formatting for formats that use physically skew sectors so
+  that skew formatting only applied if the output is a floppy type.  Disk
+  images will be in sequential order.
+* Fixed disk sidedness feature as did nothing before.
+* Fixed a bug in ubeedisk.c in function interface_support().
+* Fixed disk scan when a 400/800 kb DD disk in 1.2 Mb drive to report as 300
+  and not 250 kHz and for FM disks to report correct data rate.
+
+1 January 2014 - uBee
+---------------------
+uBeeDisk v2.3.1
+
+New for this release:
+* Added unkown 'ds40u' and 'ds80u' formats to 'ubeedisk.ini.sample'.
+
+Fixed:
+* Fixed format_track() where Microbee DS80 DSK images were not using the
+  correct sector numbers when format_track_range() was being used for
+  partial formatting of a disk (i.e.  when using the --start and --finish
+  options).  DS80 was incorrectly using sectors 1-10 instead of 21-30 for
+  data tracks.  Any formats that make use of xdg.dg_secbase2c to specify
+  data cylinders start point will now use the sector base value held in
+  xdg.dg_secbase2s.
+
+5 June 2013 - uBee
+------------------
+uBeeDisk v2.3.0
+
+New for this release:
+
+Changes:
+* Added Floppyio 'fioxx' macros to 'ubeedisk.ini.sample'.
+* Added North Star Horizon 'nshs' disk macro to 'ubeedisk.ini.sample'.
+* Windows distribution has all text files using CRLF format with '.txt' added.
+
+Fixed:
+* Changes to reset_input_drive_and_settings() to exit if not a PC Floppy
+  disk as input type.  This function was causing Remote time-out errors
+  under Linux and possibly Win32 and the code should not be necessary. 
+  Added error reporting and exit(EXIT_FAILURE) at various points.
+* Changes to close_files() to report any dsk_close() errors.
+* Fixed help in ub-xsxx-makexxx.bat files (fixed template), thanks langra.
+* Various compiler warning fixes.
+
+16 May 2012 - uBee
+------------------
+uBeeDisk v2.2.0
+
+New for this release:
+* Added a user prompt if the destination file already exists allowing the
+  file to be written over or skipped.
+* Added the Pause menu to disk scanning, format and speed tests.
+* Disable exiting using ctrl-C, ctrl-\ and ctrl-Z under Unix systems and
+  ctrl-C under windows as can leave floppy in an unstable state.
+* Added the 'ds8b' format to the Microbee formats module and 'mbee-ds8b'
+  to 'ubeedisk.ini.sample'.
+* Added additional Honeysoft 'hs350-80' and 'hs525-80' formats where more
+  than 40 tracks have been used (not auto detected).
+
+Changes:
+* Changes to 'remote' type to allow the new USB Floppyio external floppy
+  interface to use full capabilities.
+* Smarter detection of 'remote' capabilities.
+* Changes to --forceside option to allow forcing any sector header side
+  values using new 00, 01, 10 and 11 parameters.
+* Changes to the user Abort selection when writing to a floppy disk now acts
+  immediately.
+* Changes made to the drive head clean process to only run if input is a
+  floppy drive.
+* Improved Unix key checking to prevent unwanted key echoing.
+* LibDsk call back reporting requires setting verbose level 2 or higher.
+* The Slax build has been removed from the distribution packages.
+
+Fixed:
+* Fixed the format track part of a disk copy to only use the disk format's
+  'side1as0' value when the read source type does not support a fully
+  implemented psecid function.
+* Fixed remote 'serial' on Unix builds to allow serial to use full potential
+  speed (LibDsk library fix).
+* Added --side1as0 to the 'mbee-ds40' macro in 'ubeedisk.ini.sample'
+
+9 October 2011 - uBee
+---------------------
+uBeeDisk v2.1.0
+
+New for this release:
+* The disk detection has been broken up into modules allowing other disk
+  types to be added easily.
+* Added Applix 1616/OS disk detection module with 80-83 track detection
+  support.
+* Added Applix 1616/OS disk skewing when writing tracks.
+* Added Microbee detection module.
+* Added an FM disk detection module and some 8" disk formats.
+* Added Abort option to the Pause menu.
+* Added c5h0s0_525 format to the Microbee module. (not tested)
+
+Changes:
+* Changes to the --buffering option to take new arguments as this option is
+  now used to change the buffering mode as buffering is always in use.  The
+  default mode for buffering is set to normal.
+* Changes to make reading of all sectors use sector skewing regardless of
+  the buffering mode.  The buffering mode (quiet) is only different in that
+  it does not do any console output and minimal processing between sector
+  reads which might cause sectors to be missed.
+* Changes to read_sector_retry() to report logical and physical sectors and
+  report extra information if --verbose=2 is also specified.
+
+Fixed:
+* Fixed the FLAGS_C5H0S0 format which was broken in v2.0.0.
+* Fixed recovery option if drive door is opened when reading a sector and
+  changed the action for the Retry method.
+* Fixed the copy process to write out complete info file when the copy
+  process is aborted.  This places an 'X' into each unread sector location
+  within the info file.
+* Fixed --start and --finish options override track start/finish.
+
+1 October 2011 - uBee
+---------------------
+uBeeDisk v2.0.0
+
+New for this release:
+* Added 'speed' argument to --disk option. This may be used to test and
+  adjust the RPM setting of the spindle motor.
+* Added 'clean' argument to --disk option. This may be used to clean the
+  drive heads using a special cleaning disk.
+* Added track --buffering option which when enabled can greatly speed up the
+  copy process by using a skew of 2 on reads read.
+* Added --skew and --skew-ofs options.
+* Added --scanhead option to determine head range for the scanning process.
+* Added --ignore-errors option. This will ignore all errors when using the
+  Interactive error handling mode.
+* Added --flags option to set special disk format flags.
+* Added keyboard detection while copying is in progress, this allows the
+  operator to pause the process.  A paused copy will display the Pause menu
+  which allows resuming, drive head cleaning using a special disk, manual
+  cleaning and the required error handling mode to be selected.
+* Added error 'Mode' handling selection to the Interactive menu.
+* Added 'Skip' option to the Interactive menu to allow ignoring all the
+  remaining errors that are encountered for the current disk.
+* Added 'Clean' heads option to the Interactive menu to allow drive head
+  cleaning using a special disk.
+* Added Microbee Gamma, Applix 1616 and ibm3740 built-in formats.
+* Added check to disallow writing to floppy, remote, etc. if any GAP values
+  are set to 0.
+* A major overhaul of 'ubeedisk.ini.sample' to simplify disk definitions and
+  to fix problems with some existing formats, new disk formats and scan
+  sections have also been added.  All users should update their
+  'ubeedisk.ini' file based on this new file.
+
+Changes:
+* Disk scanning now reports LibDsk error when a track can't be scanned.
+* Unattended mode is now disabled by default but may be switched in or out
+  while copying is in progress.
+* When reading the first sector some drives error out as it seems there is
+  not enough delay after the head is homed so for the first read error we
+  now do an unreported retry.
+* Changes to error handling prompts.
+* Changed the --verbose option to take values greater than 1.
+* Changed all compiler directives of '__MINGW32__' to 'WIN32'.
+* Changed 'KHz' to 'kHz'.
+
+Fixed:
+* Fixed the disk.oside setting in override_values(), was using wrong
+  condition variable of disk.iside instead of disk.oside which meant the
+  output side was set wrong when disk.iside is not the default unless
+  disk.oside had also been set with an option.
+* Fixed double stepping from being enabled on auto detect for input/output
+  drives even when --idstep=off or --odstep=off was specified.  Also now
+  only sets if disk is less than 70 tracks.
+* Fixed disk scanning where some disks produced a non recoverable error
+  which prevented all tracks from being scanned successfully.
+* Previously when attempting to read a floppy disk without a disk in the
+  drive would result in an input/output error.  This error can now be
+  recovered from.
+* Fixed --side1as0 information in help.
+
+12 June 2011 - uBee
+-------------------
+uBeeDisk v1.6.2
+
+Fixed:
+* HDD formats 'hd0' and 'hd1' incorrectly documented in --help.  Replaced
+  with 'teac' and 'mscribe' respectively in help for the --format option.
+
+5 March 2011 - uBee
+-------------------
+uBeeDisk v1.6.1
+
+Fixed:
+* Fixed reading of Honeysoft disks when using a disk driver type that does
+  not support 'dsk_psecid' (i.e 'remote' and FDS.COM on the Microbee
+  computer).
+
+3 December 2010 - uBee
+----------------------
+uBeeDisk v1.6.0
+
+New for this release:
+* Added Microbee hard disk formats 'teac - Microbee TEAC HDD 10MB 306
+  cylinders, 4 heads, 17 sect/track' and 'mscribe - Microbee Miniscribe HDD
+  10MB 612 cylinders, 2 heads, 17 sect/track' to the built in formats.
+* Added Microbee hard disk 'mbee-teac', 'mbee-mscribe' and floppy disk
+  'mbee-ds40', 'mbee-ss80' sections to 'ubeedisk.ini.sample'.
+
+Fixed:
+* Fixed Windows scripts 'ub-*-makedsk.bat' and 'ub-*-makeraw.bat' scripts
+  where a $1 was used instead of %1.
+
+8 July 2010 - uBee
+------------------
+uBeeDisk v1.5.0
+
+Changes:
+* The retry1 value when copying now defaults to 30 or to 1 if the input type
+  is set to 'remote'.  The --retry-l1 option has been fixed and can now be
+  used to override this.  A low value for 'remote' is required as too many
+  retries were being used on native hardware when it wasn't really needed and
+  slowing up the process on bad sectors.
+* The retry1 value when scanning now defaults to 5 or to 1 if the input type
+  is set to 'remote'.
+* The --retry-l1 option can now be used to override the retry1 value when
+  the 'scan' command is used.
+
+Fixed:
+* The retry1 value was always being set to 30 when copying regardless of the
+  --retry-l1 setting and has now been fixed.
+
+6 April 2010 - uBee
+-------------------
+uBeeDisk v1.4.0
+
+New for this release:
+* Added --verbose option to set console output reporting level. The default
+  level is 1 which makes all console messages active like previous versions. 
+  If set to 0 then only error messages, interaction prompts and processes
+  intended to convey information will be output.
+* Added batch and shell scripts for common tasks involving disk images.
+* Added SLAX package to the distribution packages.
+
+Changes:
+* No disk description prompting if the output type is not a disk image, this
+  includes types: floppy, ntwdm, remote, rcpmfs.
+* Added more types to be excluded when creating 'info', and '.err' files.
+  Only output types that are images will be able to create these files.
+* Option parameters converted to lower case for --itype, --otype, --format,
+  --datarate, --detect and --disk.
+
+Fixed:
+* Fixed problems with sector ID, read and write functions failing because of
+  unsupported functions in the driver type in use.  The changes will make
+  use of an alternative function appropriate for the driver to be used
+  instead.  This has fixed issues when using the 'raw' and 'remote' driver
+  as an input and possibly other driver types.
+
+17 February 2010 - uBee
+-----------------------
+uBeeDisk v1.3.0
+
+Changes:
+* Added data rate and encoding mode detection and reporting to the disk
+  scanning process.
+* Changes to the disk scanning command so that scanning will only occur on
+  one side of the disk when specifying an --iside option.  If not specified
+  then both sides are scanned.
+* Major rewrite of the Makefile.
+
+Fixed:
+* Fixed a problem when using batch mode (--count=n) the seeked count in the
+  unattended mode was not being set back to 0 for the next copy operation.
+* Fixed the disk copy process to set 'mbee' detection based on input and not
+  output driver types.
+* Fixed the disk info command.
+
+6 February 2010 - uBee
+----------------------
+uBeeDisk v1.2.0
+
+New for this release:
+* Added --retry-l1 and --retry-l2 retry options.  The existing --retry
+  option is the same as option --retry-l2.
+* Added --unattended option to enable/disable automatic handling of errors. 
+  This mode is now enabled by default.  See the global section of the
+  ubeedisk.ini.sample if disabled is required by default.
+* Added --unattended-rab option to set number of sector errors allowed
+  before aborting the copy process when the unattended mode is in use.
+* Added --unattended-rps option to set number of retries per sector allowed
+  when the unattended mode is in use.
+* Added --unattended-seek option to set the maximum number of error seeks
+  per disk read allowed when the unattended mode is in use.
+* Added another option to the recovery options: '[T] ReTry (don't seek T0)'
+* Added Atari ST 80T Single/Double sided and some MSDOS formats to
+  ubeedisk.ini.sample.
+* Added --diskdesc option so that a disk description can be passed.
+* Added --diskdescf option for a disk description contained in a file.
+* Added --force option to bypass confirming requested actions.
+* Added --append-error to append the error log (if created) to the 'info'
+  file instead of creating an error file.
+* Added a win32 binary installer to the distribution.
+
+Changes:
+* Changed method used for reading sectors as was causing many soft retries
+  to show up in the '.info' file and likely to have caused problems on some
+  disks because of a too low retry value at the LibDsk level.
+* Disabled error checking for disk writing as this was failing when writing
+  to disk images following certain disk read errors.  This will be looked at
+  further at another time.
+* Changes and additions to the generated '.info' files.
+* Changed error logging to now go to a '.err' file by default unless
+  --append-error has been specified.
+
+10 March 2009 - uBee
+--------------------
+uBeeDisk v1.1.0
+
+New for this release:
+* Added error report logging, this is appended to the info file.
+* Added --log option to set the level of logging for read errors.
+
+Changes:
+* Transient errors (including Unknown Error) are now processed just like any
+  other disk errors. The error count now also increments when one of these
+  errors occurs and the user will be prompted for action when the retry
+  counter expires.
+
+Fixed:
+* Sector map was updated but the error count was not being incremented on a
+  transient read error and has been corrected.
+
+27 December 2008 - uBee
+-----------------------
+uBeeDisk v1.0.0
+
+Initial release:
+Copies disks and images from one to another.  This program was developed to
+archive Microbee disk images from floppy disks and to write back to floppy,
+other disk formats can be added.  The intended audience is mainly for users
+of computer emulators.  As the program makes use of the 'LibDsk' library
+there are many options for image types.  The program provides some data
+recovery methods along with 'info' files for each disk image file created. 
+An 'info' file contains information about the disk image, a status map of
+all sectors read from the disk and an MD5 stamp of the associated disk
+image.
