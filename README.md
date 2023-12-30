@@ -1,10 +1,10 @@
 ********************************************************************************
-# UBEEDISK Version 4.01 running on MacOS #
+# uBEEDISK Version 4.01 running on MacOS #
 - UBEE : Original Code v4.00
 - Snake : The dumb stuff
 - fathertedcrilly : The tricky stuff
 ********************************************************************************
-                                    uBeeDisk 4.00
+                                    uBeeDisk 4.01
 
          A tool for converting disks/images from one to another with
        optional auto detection options for Microbee, DOS, Applix disks.
@@ -45,17 +45,14 @@ http://www.seasip.demon.co.uk/Unix/LibDsk/
 This README file is updated for each new release and may contain additional
 examples and corrections.
 
-You can download the packages from here:
-http://www.microbee-mspp.org.au/repository
-
 IMPORTANT: It should be pointed out that once a floppy disk image has been
-created that it is never written to again if it for archival purposes.  This
+created it is never written to again if it is for archival purposes.  This
 means DO NOT use the disk image under an emulator or by any other tools that
 may write to the disk image.  Make a working copy(s) of the disk image and
 only access that.  It is also important to archive the '.info' files that
-ubeedisk creates as it records any errors in sectors.
+UbeeDisk creates as it records any errors in sectors.
 
-To access files on disk images see section "Accessing files".
+To access files on disk images see the section "Accessing files".
 
 Platforms
 ---------
@@ -72,10 +69,10 @@ Overall features
 * Can be run from USB Flash drives under a Linux 'Live CD'
 * Copy Microbee and Honeysoft disks.
 * Scan disk tracks for sector ID header information.
-* Format disks using option custom GAP and SYNC lengths.
+* Format disks using the option custom GAP and SYNC lengths.
 * Access to remote floppy disks on your Microbee.
 * Speed testing of drive spindle.
-* Cleaning mode using special disk or by manual methods.
+* Cleaning mode using a special disk or by manual methods.
 * Based on the 'LibDsk' library providing many disk types and formats.
 * Configurable retry counts.
 * Unattended or operator interactive copy mode.
@@ -101,7 +98,7 @@ a high price.
 If you still have some Floppy drives hang on to them!
 
 Later PC BIOS's may only support one floppy drive or floppy support may not
-even be supported.  Eventually the 34W sockets and FDC hardware is likely to
+even be supported. Eventually the 34W sockets and FDC hardware is likely to
 be removed at some stage if not already.  Even if hardware support is
 provided the Floppy controller IC and BIOS code may not work on some disks
 due to Index hole problems.  There are work arounds for it though.
@@ -116,7 +113,7 @@ floppy interface board to interact with 3.5", 5.25" and 8" SD/DD/HD floppy
 drives using MFM or FM recording modes.  The name of this project is
 "Floppyio".
 
-http://www.microbee-mspp.org.au/forum/viewtopic.php?f=47&t=486
+https://discord.gg/tmYuvEtMH6
 
 Archived Microbee disk images
 =============================
@@ -127,11 +124,7 @@ preserve software for the Microbee and other Australian microcomputers from
 around the 80's era.  The MSPP is also able to image Microbee or other disks
 provided by the community.
 
-http://www.microbee-mspp.org.au/forum
-
-If you think you're able to assist then please join the forum at the above
-URL and send a system PM or email to the 'admin' or alternatively send an
-email to admin@microbee-mspp.org.au
+https://discord.gg/tmYuvEtMH6
 
 IMPORTANT INFORMATION
 =====================
@@ -1846,6 +1839,12 @@ For bug reports please provide the following information:
 # Build for macOS #
 - % brew install libb2
 - % make
+
+
+Test with this
+% ubeedisk --detect=mbee3 --if=original.dsk --of=copy.dsk
+
+
 
 # Build for Linux #
 - $ make
