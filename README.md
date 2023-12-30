@@ -1841,7 +1841,7 @@ For bug reports please provide the following information:
 - % make
 
 
-# Test with this #
+## Test with this ##
 - % ubeedisk --detect=mbee3 --if=original.dsk --of=copy.dsk
 
 
