@@ -4,7 +4,7 @@
 //*      A tool for converting disks/images from one to another with auto      *
 //*                  detection options for Microbee disks.                     *
 //*                                                                            *
-//*                       Copyright (C) 2008-2017 uBee                         *
+//*                       Copyright (C) 2008-2023 uBee                         *
 //******************************************************************************
 //
 // This program permits copying and creating disks and images from one to
@@ -18,6 +18,9 @@
 //
 //==============================================================================
 // ChangeLog (most recent entries are at top)
+//==============================================================================
+// v4.0.1 - 28 December 2023, Tony Sanchez
+// - Change to options_getoptstr() in options.c to work around clang strict array bounds check on MacOS
 //==============================================================================
 // v4.0.0 - 26 January 2017, uBee
 // - Added GAPSET and SYNCSET values to override_values().

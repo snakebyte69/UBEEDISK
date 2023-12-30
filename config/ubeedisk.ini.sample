@@ -191,7 +191,7 @@
 #===============================================================================
 [global-start]
 # set the version of this config file (avoids warning message)
---confv=4.0.0
+--confv=4.0.1
 
 # set some built in system dependent variables for Windows
 --if-system=win

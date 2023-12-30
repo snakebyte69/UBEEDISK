@@ -1,10 +1,5 @@
 ********************************************************************************
-# UBEEDISK Version 4.01 running on MacOS #
-- UBEE : Original Code v4.00
-- Snake : The dumb stuff
-- fathertedcrilly : The tricky stuff
-********************************************************************************
-                                    uBeeDisk 4.00
+                                    uBeeDisk
 
          A tool for converting disks/images from one to another with
        optional auto detection options for Microbee, DOS, Applix disks.
@@ -46,7 +41,7 @@ This README file is updated for each new release and may contain additional
 examples and corrections.
 
 You can download the packages from here:
-https://discord.gg/ahR48kZvJR
+http://www.microbee-mspp.org.au/repository
 
 IMPORTANT: It should be pointed out that once a floppy disk image has been
 created that it is never written to again if it for archival purposes.  This
@@ -116,7 +111,7 @@ floppy interface board to interact with 3.5", 5.25" and 8" SD/DD/HD floppy
 drives using MFM or FM recording modes.  The name of this project is
 "Floppyio".
 
-https://discord.gg/ahR48kZvJR
+http://www.microbee-mspp.org.au/forum/viewtopic.php?f=47&t=486
 
 Archived Microbee disk images
 =============================
@@ -127,7 +122,7 @@ preserve software for the Microbee and other Australian microcomputers from
 around the 80's era.  The MSPP is also able to image Microbee or other disks
 provided by the community.
 
-https://discord.gg/ahR48kZvJR
+http://www.microbee-mspp.org.au/forum
 
 If you think you're able to assist then please join the forum at the above
 URL and send a system PM or email to the 'admin' or alternatively send an
@@ -412,7 +407,7 @@ port to any floppy disk based Microbee Z80 computer.
 The FDS.COM program, sources and documentation containing some examples can
 be found here under 'Utilities':
 
-https://discord.gg/ahR48kZvJR
+http://www.microbee-mspp.org.au/repository
 
 SCANNING A DISK/IMAGE
 ---------------------
@@ -1805,20 +1800,21 @@ Emulators
 Emulators may also be able to access files on disk images but please read the
 IMPORTANT note above first.
 
-Projects by this ubee
+Projects by this author
 =======================
 
 uBee512
 -------
 An emulator for the Microbee Z80 ROM, FDD and HDD based models.
-https://discord.gg/SYzQG2XnAz
+
+http://www.microbee-mspp.org.au/repository
 
 uBeeDisk
 --------
 A tool for converting disks/images from one to another with
 auto detection options for Microbee disks.
 
-https://discord.gg/RRbfkT3duy
+http://www.microbee-mspp.org.au/repository
 
 z80em86
 -------
@@ -1830,7 +1826,7 @@ http://www.gaby.de/z80/z80emu.htm
 Contact
 =======
 If you have any new feature suggestions, bug reports, etc. then please post
-in Discord at https://discord.gg/RRbfkT3duy
+in the appropriate forum topic at http://www.microbee-mspp.org.au/forum
 
 For bug reports please provide the following information:
 1) Version number of the uBeeDisk program.
@@ -1839,13 +1835,3 @@ For bug reports please provide the following information:
    the actual Linux distribution used and version.
 3) Command line start up options used (cut and paste if possible)
 4) Description of the problem.
-
-# Build for Windows #
-- C: make
-
-# Build for macOS #
-- % brew install libb2
-- % make
-
-# Build for Linux #
-- $ make

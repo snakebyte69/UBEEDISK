@@ -12,6 +12,9 @@
 //==============================================================================
 // ChangeLog (most recent entries are at top)
 //==============================================================================
+// v4.0.1 - 28 December 2023, Tony Sanchez
+// - Change to options_getoptstr() to work around clang strict array bounds check on MacOS
+//==============================================================================
 // v4.0.0 - 25 January 2017, uBee
 // - Added 'dos' 'atari' and 'msx' detection arguments to help() to the
 //   --detect option.
@@ -2168,6 +2171,10 @@ static void options_getoptstr (const char *name, char *options)
  int finish = 0;
 
  char s[OPTIONS_SIZE];
+       
+#ifdef DARWIN
+    char s1[OPTIONS_SIZE];
+#endif
 
  if (! fp)
     return;
@@ -2181,9 +2188,15 @@ static void options_getoptstr (const char *name, char *options)
     {
      if ((s[0] == '[') && (s[l-1] == ']'))
         {
-         strncpy(s, &s[1], l-2);
-         s[l-2] = 0;
-         finish = (strcmp(s, name) == 0);
+            #ifdef DARWIN
+                strncpy(s1, &s[1], l-2);
+                s1[l-2] = 0;
+                finish = (strcmp(s1, name) == 0);
+            #else
+                strncpy(s, &s[1], l-2);
+                s[l-2] = 0;
+                finish = (strcmp(s, name) == 0);
+            #endif
         }
     }
 

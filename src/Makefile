@@ -4,11 +4,14 @@
 #*      A tool for converting disks/images from one to another with auto       *
 #*                   detection options for Microbee disks.                     *
 #*                                                                             *
-#*                       Copyright (C) 2008-2017 uBee                          *
+#*                       Copyright (C) 2008-2023 uBee                          *
 #*******************************************************************************
 #
 #===============================================================================
 # REVISION HISTORY (Most recent at top)
+#===============================================================================
+# v4.0.1 - uBee 28 December 2023 Tony Sanchez
+# - Added detection for MacOS systems
 #===============================================================================
 # v4.0.0 - uBee 29 December 2016
 # - Added dos.o module.
@@ -121,6 +124,11 @@ ifeq ($(SYSTEM),FreeBSD)
 OTHER_SYSTEM=0
 endif
 
+#============================== Darwin build =================================
+ifeq ($(SYSTEM),Darwin)
+COMOPTS+=-DDARWIN
+endif
+
 #=========================== other native systems =============================
 ifeq ($(OTHER_SYSTEM),1)
 endif
@@ -142,10 +150,15 @@ endif
    CC=gcc
    CFLAGS=$(DEBUG) -O2 -Wall
    CINC+= -I/usr/local/include -I/usr/include -I/opt/local/include 
-#  CLIB=-Wl,-Bstatic -ldsk -lbz2 -lz -Wl,-Bdynamic
-   CLIB=-L/opt/local/lib -Wl, -ldsk -lb2 -lz 
+   
+   ifeq ($(SYSTEM),Darwin)
+	     CLIB=-L/opt/local/lib -L/usr/local/lib  -Wl, -ldsk -lb2 -lz
+   else	
+        CLIB=-Wl,-Bstatic -ldsk -lbz2 -lz -Wl,-Bdynamic 
+   endif
+   
    CDEF=-D_GNU_SOURCE=1 -D_REENTRANT
-   CDEF+=-DTITLESTRING=$(APP_NAME_VER) -DAPPVER=$(APP_VER) -DAPPNAME=$(APP_NAME)
+   CDEF+=-DTITLESTRING=$(APP_NAME_VER) -DAPPVER=$(APP_VER) -DAPPNAME=$(APP_NAME) $(COMOPTS)
 
 build: build/$(APP) warning
 
