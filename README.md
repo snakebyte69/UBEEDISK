@@ -1,8 +1,8 @@
 ********************************************************************************
 # uBeeDisk Version 4.01 running on MacOS #
-- uBee : Original Code v4.00
-- Snake : The dumb stuff
+- uBee : Original Code v4.00 Copyright (C) 2007-2017
 - fathertedcrilly : The tricky stuff
+- Snake : The dumb stuff
 ********************************************************************************
                                     uBeeDisk 4.01
 
