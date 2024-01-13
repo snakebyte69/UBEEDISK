@@ -14,7 +14,7 @@
 For contact details please see the 'Contact' section at the end of this file.
 ********************************************************************************
 
-Join our Social Media
+For more information and support join our Social Media
 # Social Media # 
 - Microbee Programmers Facebook https://www.facebook.com/groups/microbeeprogrammers
 - Microbee Programmers Discord https://discord.gg/hSsTfsA6gy
